@@ -8,15 +8,14 @@ import org.http4s.server.blaze.BlazeServerBuilder
 
 object Server extends IOApp {
 
-  private def services(xa: Transactor[IO]): IO[HttpApp[IO]] =
+  private def buildServices(xa: Transactor[IO]): IO[HttpApp[IO]] =
     IO {
       val dao = new EchoDao[IO](xa)
-      new EchoService[IO](dao)
-        .routes
-        .orNotFound
+      val app = new EchoService[IO](dao).routes.orNotFound
+      new ErrorHandler(app).wrapped
     }
 
-  private def server(config: HttpConfig, app: HttpApp[IO]): IO[Unit] =
+  private def startServer(config: HttpConfig, app: HttpApp[IO]): IO[Unit] =
     BlazeServerBuilder[IO]
       .bindHttp(config.port, config.host)
       .withHttpApp(app)
@@ -28,9 +27,10 @@ object Server extends IOApp {
     AppConfig.withConfig { cfg =>
       Database.transactor[IO](cfg.db).use { xa =>
         for {
-          app <- services(xa)
-          _   <- server(cfg.http, app)
+          app <- buildServices(xa)
+          _   <- startServer(cfg.http, app)
         } yield ExitCode.Success
       }
     }
+
 }

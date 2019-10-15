@@ -1,25 +1,44 @@
 package com.molo.app
 
-import cats.implicits._
 import cats.effect.Sync
-import doobie.util.transactor.Transactor
-import org.http4s.HttpRoutes
+import cats.implicits._
 import doobie.implicits._
+import doobie.util.transactor.Transactor
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.numeric.NonNegative
+import io.circe.generic.auto._
+import io.circe.refined._
+import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
+import org.http4s.{EntityDecoder, EntityEncoder, HttpRoutes, Response}
 
 class EchoService[F[_]: Sync](dao: EchoDao[F]) extends Http4sDsl[F] {
+  import com.molo.app.EchoService._
+
+  private implicit val selectedIntEncoder: EntityEncoder[F, SelectedInt] = jsonEncoderOf[F, SelectedInt]
+  private implicit val personEncoder: EntityEncoder[F, Person]           = jsonEncoderOf[F, Person]
+  private implicit val personDecoder: EntityDecoder[F, Person]           = jsonOf[F, Person]
 
   val routes: HttpRoutes[F] = HttpRoutes.of[F] {
     case GET -> Root / "echo-int" / IntVar(n) =>
-      dao.getInt(n).flatMap(result => Ok(s"Selected: $result"))
+      dao.getInt(n).map(SelectedInt).flatMap(Ok(_))
+
+    case req @ (POST -> Root / "person") =>
+      req.attemptAs[Person].foldF(_ => AppError.InvalidBody.raiseError[F, Response[F]], Ok(_)) // test error handler
   }
 
+}
+
+object EchoService {
+  final case class SelectedInt(selected: Int)
+  final case class Person(name: String, age: Int Refined NonNegative)
 }
 
 class EchoDao[F[_]: Sync](xa: Transactor[F]) {
 
   def getInt(n: Int): F[Int] =
-    EchoQueries.select(n)
+    EchoQueries
+      .select(n)
       .unique
       .transact(xa)
 

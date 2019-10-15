@@ -6,22 +6,22 @@ import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect._
 
-case class DbConfig(
-  connectionThreads: Int,
-  driver: String,
-  url: String,
-  user: String,
-  pass: String
+final case class DbConfig(
+    connectionThreads: Int,
+    driver: String,
+    url: String,
+    user: String,
+    pass: String
 )
 
-case class HttpConfig(
-  port: Int,
-  host: String
+final case class HttpConfig(
+    port: Int,
+    host: String
 )
 
-case class AppConfig(
-  http: HttpConfig,
-  db: DbConfig
+final case class AppConfig(
+    http: HttpConfig,
+    db: DbConfig
 )
 
 object AppConfig {
