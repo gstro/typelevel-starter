@@ -1,10 +1,16 @@
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.15")
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.4")
-//addSbtPlugin("com.softwaremill.clippy" % "plugin-sbt" % "0.5.3")
-addSbtPlugin("org.duhemm" % "sbt-errors-summary" % "0.6.3")
-addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.10")
-addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.1.8")
 
-addCompilerPlugin("io.tryp" % "splain" % "0.3.5" cross CrossVersion.patch)
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-license-report" % "1.2.0")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.4.3")
+addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.3")
+
+addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
+
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.3")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.7")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4")
+
+addSbtPlugin("org.duhemm" % "sbt-errors-summary" % "0.6.3")
+addCompilerPlugin("io.tryp" % "splain" % "0.4.1" cross CrossVersion.patch)
 addSbtCoursier
