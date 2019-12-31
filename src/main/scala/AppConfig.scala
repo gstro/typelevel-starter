@@ -4,7 +4,7 @@ import cats.effect.Sync
 
 import pureconfig._
 import pureconfig.generic.auto._
-import pureconfig.module.catseffect._
+import pureconfig.module.catseffect.syntax._
 
 final case class DbConfig(
     connectionThreads: Int,
