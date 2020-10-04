@@ -5,7 +5,7 @@ import cats.implicits._
 import doobie.implicits._
 import doobie.util.transactor.Transactor
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.NonNegative
+import eu.timepit.refined.numeric.Positive
 import io.circe.generic.auto._
 import io.circe.refined._
 import org.http4s.circe._
@@ -31,7 +31,7 @@ class EchoService[F[_]: Sync](dao: EchoDao[F]) extends Http4sDsl[F] {
 
 object EchoService {
   final case class SelectedInt(selected: Int)
-  final case class Person(name: String, age: Int Refined NonNegative)
+  final case class Person(name: String, age: Int Refined Positive)
 }
 
 class EchoDao[F[_]: Sync](xa: Transactor[F]) {

@@ -1,6 +1,6 @@
 package com.molo.app
 
-import cats.effect.{Blocker, ContextShift, Sync}
+import cats.effect.{Blocker, ContextShift, Resource, Sync}
 import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
@@ -27,7 +27,7 @@ object AppConfig {
 
   private val namespace = "app"
 
-  def withConfig[F[_]: ContextShift, A](blocker: Blocker)(f: AppConfig => F[A])(implicit F: Sync[F]): F[A] =
-    F.flatMap(ConfigSource.default.at(namespace).loadF[F, AppConfig](blocker))(f)
+  def resource[F[_]: ContextShift, A](blocker: Blocker)(implicit F: Sync[F]): Resource[F, AppConfig] =
+    Resource.liftF(ConfigSource.default.at(namespace).loadF[F, AppConfig](blocker))
 
 }
