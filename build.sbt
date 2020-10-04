@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
   // config
   "com.github.pureconfig" %% "pureconfig"             % PureConfigVersion,
   "com.github.pureconfig" %% "pureconfig-cats-effect" % PureConfigVersion,
-//  "com.github.pureconfig" %% "pureconfig-http4s"      % PureConfigVersion, // not updated for milestone release
+  "com.github.pureconfig" %% "pureconfig-http4s"      % PureConfigVersion,
   "eu.timepit"            %% "refined-pureconfig"     % RefinedVersion,
 
   // logging
