@@ -1,6 +1,6 @@
 # typelevel-starter
-Starter Scala web-service project using Typelevel libraries
 
+Starter Scala web-service template using the [Typelevel](https://typelevel.org/) ecosystem.
 
 ### Running the Service
 
