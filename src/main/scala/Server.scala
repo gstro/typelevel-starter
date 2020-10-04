@@ -5,6 +5,7 @@ import doobie.util.transactor.Transactor
 import org.http4s._
 import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
+import scala.concurrent.ExecutionContext.global
 
 object Server extends IOApp {
 
@@ -16,21 +17,24 @@ object Server extends IOApp {
     }
 
   private def startServer(config: HttpConfig, app: HttpApp[IO]): IO[Unit] =
-    BlazeServerBuilder[IO]
+    BlazeServerBuilder[IO](global)
       .bindHttp(config.port, config.host)
       .withHttpApp(app)
       .serve
       .compile
       .drain
 
-  override def run(args: List[String]): IO[ExitCode] =
-    AppConfig.withConfig { cfg =>
-      Database.transactor[IO](cfg.db).use { xa =>
-        for {
-          app <- buildServices(xa)
-          _   <- startServer(cfg.http, app)
-        } yield ExitCode.Success
+  override def run(args: List[String]): IO[ExitCode] = {
+    Blocker[IO].use { blocker =>
+      AppConfig.withConfig(blocker) { cfg =>
+        Database.transactor[IO](cfg.db).use { xa =>
+          for {
+            app <- buildServices(xa)
+            _   <- startServer(cfg.http, app)
+          } yield ExitCode.Success
+        }
       }
     }
+  }
 
 }
