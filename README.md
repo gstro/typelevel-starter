@@ -1,6 +1,15 @@
 # typelevel-starter
 
-Starter Scala web-service template using the [Typelevel](https://typelevel.org/) ecosystem.
+Starter Scala web-service template using the [Typelevel](https://typelevel.org/)
+ecosystem. This starter project is built on the these core Typelevel libraries:
+- [Cats Effect](https://typelevel.org/cats-effect/)
+- [FS2](https://fs2.io/)
+- [Http4s](https://http4s.org/)
+- [Doobie](https://tpolecat.github.io/doobie/)
+- [Circe](https://circe.github.io/circe/)
+
+This project also includes a simple `docker-compose` file to provide a Postgres
+database instance container for the service.
 
 ### Running the Service
 
@@ -40,13 +49,6 @@ docker-compose down
 - `dumpLicenseReport`
 
 ### Dependencies and Plugins
-
-This starter project is built on the these core Typelevel libraries:
-- [Cats Effect](https://typelevel.org/cats-effect/)
-- [FS2](https://fs2.io/)
-- [Http4s](https://http4s.org/)
-- [Doobie](https://tpolecat.github.io/doobie/)
-- [Circe](https://circe.github.io/circe/)
 
 Other libraries and plugins used by this project
 - [Flyway](https://flywaydb.org/)
