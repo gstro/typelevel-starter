@@ -28,7 +28,7 @@ object Server extends IOApp {
   private def resources: Resource[IO, (AppConfig, Transactor[IO])] =
     for {
       blocker    <- Blocker[IO]
-      config     <- AppConfig.resource(blocker)
+      config     <- AppConfig.resource[IO](blocker)
       transactor <- Database.transactor[IO](config.db, blocker)
     } yield (config, transactor)
 
