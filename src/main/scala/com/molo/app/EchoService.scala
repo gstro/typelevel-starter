@@ -23,7 +23,7 @@ class EchoService[F[_]: Sync](dao: EchoDao[F]) extends Http4sDsl[F] {
     case GET -> Root / "echo-int" / IntVar(n) =>
       dao.getInt(n).map(SelectedInt).flatMap(Ok(_))
 
-    case req @ (POST -> Root / "person") =>
+    case req @ POST -> Root / "person" =>
       req.attemptAs[Person].foldF(_ => AppError.InvalidBody.raiseError[F, Response[F]], Ok(_)) // test error handler
   }
 

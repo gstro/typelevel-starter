@@ -2,19 +2,19 @@ name := "typelevel-starter"
 
 version := "0.1"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.4"
 
-lazy val CatsEffectVersion = "2.2.0"
-lazy val Fs2Version        = "2.4.4"
-lazy val Http4sVersion     = "0.21.7"
+lazy val CatsEffectVersion = "2.3.0"
+lazy val Fs2Version        = "2.4.6"
+lazy val Http4sVersion     = "0.21.13"
 lazy val CirceVersion      = "0.13.0"
-lazy val DoobieVersion     = "0.9.2"
-lazy val FlywayVersion     = "7.0.0"
-lazy val RefinedVersion    = "0.9.17"
+lazy val DoobieVersion     = "0.9.4"
+lazy val FlywayVersion     = "7.3.0"
+lazy val RefinedVersion    = "0.9.18"
 lazy val PureConfigVersion = "0.14.0"
 lazy val LogbackVersion    = "1.2.3"
-lazy val ScalaTestVersion  = "3.2.2"
-lazy val ScalaCheckVersion = "1.14.3"
+lazy val ScalaTestVersion  = "3.2.3"
+lazy val ScalaCheckVersion = "1.15.1"
 
 libraryDependencies ++= Seq(
   // http
@@ -56,11 +56,12 @@ libraryDependencies ++= Seq(
 // these don't seem to play well with tagless-final style
 wartremoverErrors ++= Warts.allBut(
   Wart.Any,
-  Wart.Nothing
+  Wart.Nothing,
+  Wart.GlobalExecutionContext // this is fine
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.0" cross CrossVersion.full)
+addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.2" cross CrossVersion.full)
 addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
 addCompilerPlugin(scalafixSemanticdb)
 scalacOptions += "-Yrangepos"

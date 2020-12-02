@@ -27,7 +27,7 @@ object AppConfig {
 
   private val namespace = "app"
 
-  def resource[F[_]: ContextShift, A](blocker: Blocker)(implicit F: Sync[F]): Resource[F, AppConfig] =
+  def resource[F[_]: Sync: ContextShift, A](blocker: Blocker): Resource[F, AppConfig] =
     Resource.liftF(ConfigSource.default.at(namespace).loadF[F, AppConfig](blocker))
 
 }

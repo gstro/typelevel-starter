@@ -25,21 +25,19 @@ object Server extends IOApp {
       .compile
       .drain
 
-  private def use[A](operation: (AppConfig, Transactor[IO]) => IO[A]): IO[A] =
-    (for {
+  private def resources: Resource[IO, (AppConfig, Transactor[IO])] =
+    for {
       blocker    <- Blocker[IO]
       config     <- AppConfig.resource(blocker)
       transactor <- Database.transactor[IO](config.db, blocker)
-    } yield (config, transactor))
-      .use(operation.tupled)
+    } yield (config, transactor)
 
-  override def run(args: List[String]): IO[ExitCode] = {
-    use { case (cfg, xa) =>
+  override def run(args: List[String]): IO[ExitCode] =
+    resources.use { case (cfg, xa) =>
       for {
         app <- buildServices(xa)
         _   <- startServer(cfg.http, app)
       } yield ExitCode.Success
     }
-  }
 
 }

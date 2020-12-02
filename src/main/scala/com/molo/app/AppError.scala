@@ -1,7 +1,7 @@
 package com.molo.app
 
+import cats.ApplicativeError
 import cats.data.Kleisli
-import cats.effect.Sync
 import cats.implicits._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{HttpApp, Response}
@@ -11,7 +11,7 @@ object AppError {
   case object InvalidBody extends AppError
 }
 
-class ErrorHandler[F[_]: Sync](service: HttpApp[F]) extends Http4sDsl[F] {
+class ErrorHandler[F[_]](service: HttpApp[F])(implicit ev: ApplicativeError[F, Throwable]) extends Http4sDsl[F] {
 
   private type Handler[E <: Exception with Product with Serializable] = E => F[Response[F]]
 
